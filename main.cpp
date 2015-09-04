@@ -24,11 +24,11 @@
  *
  * @section DESCRIPTION
  * SAMU
- * 
- * The main purpose of this project is to allow the evaluation and 
- * verification of the results of the paper entitled "A disembodied 
- * developmental robotic agent called Samu Bátfai". It is our hope 
- * that Samu will be the ancestor of developmental robotics chatter 
+ *
+ * The main purpose of this project is to allow the evaluation and
+ * verification of the results of the paper entitled "A disembodied
+ * developmental robotic agent called Samu Bátfai". It is our hope
+ * that Samu will be the ancestor of developmental robotics chatter
  * bots that will be able to chat in natural language like humans do.
  *
  */
@@ -78,12 +78,16 @@ int main ( int argc, char **argv )
   for ( Samu samu; samu.run(); )
     {
       double sum {0.0};
-      for ( int i {0}; i<7; ++i )
+      if ( samu.sleep() )
         {
-          samu << test[i];
-          sum += samu.reward();
+          for ( int i {0}; i<7; ++i )
+            {
+              samu << test[i];
+              sum += samu.reward();
+
+            }
+          std::cerr << "###### " << ++j << "-th iter " << sum << std::endl;
         }
-      std::cerr << "###### " << ++j << "-th iter " << sum << std::endl;
     }
 
   return 0;

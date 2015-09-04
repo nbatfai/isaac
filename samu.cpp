@@ -24,11 +24,11 @@
  *
  * @section DESCRIPTION
  * SAMU
- * 
- * The main purpose of this project is to allow the evaluation and 
- * verification of the results of the paper entitled "A disembodied 
- * developmental robotic agent called Samu Bátfai". It is our hope 
- * that Samu will be the ancestor of developmental robotics chatter 
+ *
+ * The main purpose of this project is to allow the evaluation and
+ * verification of the results of the paper entitled "A disembodied
+ * developmental robotic agent called Samu Bátfai". It is our hope
+ * that Samu will be the ancestor of developmental robotics chatter
  * bots that will be able to chat in natural language like humans do.
  *
  */
@@ -38,27 +38,71 @@
 #include <sstream>
 #include "samu.hpp"
 
-void Samu::FamilyCaregiverShell(void)
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+void Samu::FamilyCaregiverShell ( void )
 {
   std::string cmd_prefix = "___";
 
+  fd_set rfds;
+  struct timeval tmo;
+
+  FD_ZERO ( &rfds );
+
   std::cout << Caregiver() << "@Caregiver> " << std::flush;
 
-  for ( std::string line; std::getline ( std::cin,  line ); )
+  int sleep {0};
+  for ( ;; )
     {
 
-      if ( !line.compare ( 0, cmd_prefix.length(), cmd_prefix ) )
+      FD_SET ( 0, &rfds );
+
+      tmo.tv_sec = 1;
+      tmo.tv_usec = 0;
+
+      int s = select ( 1, &rfds, NULL, NULL, &tmo );
+
+      if ( s == -1 )
         {
-          if ( line == cmd_prefix )
-            NextCaregiver();
+          perror ( "select" );
+        }
+      else if ( s )
+        {
+          std::string line;
+          std::getline ( std::cin,  line );
+
+	  if(sleep_)
+	    std::cout << "Isaac is awake now." << std::endl;
+	    
+          sleep_ = false;
+	  sleep = 0;
+
+          if ( !line.compare ( 0, cmd_prefix.length(), cmd_prefix ) )
+            {
+              if ( line == cmd_prefix )
+                NextCaregiver();
+            }
+          else
+            {
+              *this << line;
+            }
+
         }
       else
         {
-          *this << line;
+	  if ( ++sleep > sleep_after_ )
+	  {
+	    if(!sleep_)
+	      std::cout << "Isaac went to sleep." << std::endl;
+            sleep_ = true;
+	  }
+	    
         }
 
-      std::cout << Caregiver() << "@Caregiver> " << std::flush;
+      //std::cout << Caregiver() << "@Caregiver> " << std::endl;
     }
-    
-    run_ = false;    
+
+  run_ = false;
 }

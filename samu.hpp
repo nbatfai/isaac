@@ -62,11 +62,22 @@ public:
     terminal_thread_.join();
   }
 
-  bool run ( void )
+  bool run ( void ) const 
   {
     return run_;
   }
 
+  bool sleep ( void ) const
+  {
+    return sleep_;
+  }
+
+  bool sleep_after ( void ) const
+  {
+    return sleep_after_;
+  }
+  
+  
   void FamilyCaregiverShell ( void );
   void terminal ( void )
   {
@@ -102,6 +113,8 @@ public:
 private:
 
   bool run_ {true};
+  bool sleep_{true};
+  int sleep_after_{30};
   std::mutex mutex_;
   std::condition_variable cv_;
   std::thread terminal_thread_ {&Samu::terminal, this};

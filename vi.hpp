@@ -136,7 +136,8 @@ public:
 
 #ifndef Q_LOOKUP_TABLE
 
-    std::cout << "Samu> "
+    std::cout << std::endl
+              << "Isaac@AI > "
               << ql ( triplets[0], prg, img_input ) << std::endl;
 
 #else
