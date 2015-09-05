@@ -1,5 +1,5 @@
  #
- # @brief SAMU - the potential ancestor of developmental robotics chatter bots
+ # @brief ISAAC - deep Q learning with neural networks for predicting the next sentence of a conversation
  #
  # @file CMakeLists.txt
  # @author  Norbert Bátfai <nbatfai@gmail.com>
@@ -23,8 +23,15 @@
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  #
  # @section DESCRIPTION
- # SAMU
+ #
+ # ISAAC
+ #
+ # "The son of Samu is Isaac." The project called Isaac is a case study 
+ # of using deep Q learning with neural networks for predicting the next 
+ # sentence of a conversation.
  # 
+ # SAMU
+ #
  # The main purpose of this project is to allow the evaluation and 
  # verification of the results of the paper entitled "A disembodied 
  # developmental robotic agent called Samu Bátfai". It is our hope 
@@ -36,6 +43,7 @@ cmake_minimum_required(VERSION 2.8.5)
 project(SAMU)
 
 #add_definitions(-DQ_LOOKUP_TABLE)
+add_definitions(-DQNN_DEBUG)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 

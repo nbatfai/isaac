@@ -2,7 +2,7 @@
 #define NLP_HPP
 
 /**
- * @brief SAMU - the potential ancestor of developmental robotics chatter bots
+ * @brief ISAAC - deep Q learning with neural networks for predicting the next sentence of a conversation
  *
  * @file nlp.hpp
  * @author  Norbert Bátfai <nbatfai@gmail.com>

@@ -2,7 +2,7 @@
 #define VI_HPP
 
 /**
- * @brief SAMU - the potential ancestor of developmental robotics chatter bots
+ * @brief ISAAC - deep Q learning with neural networks for predicting the next sentence of a conversation
  *
  * @file vi.hpp
  * @author  Norbert Bátfai <nbatfai@gmail.com>
@@ -136,9 +136,19 @@ public:
 
 #ifndef Q_LOOKUP_TABLE
 
+    SPOTriplet response = ql ( triplets[0], prg, img_input );
+
     std::cout << std::endl
-              << "Isaac@AI > "
-              << ql ( triplets[0], prg, img_input ) << std::endl;
+              << "Isaac@AI"
+#ifdef QNN_DEBUG	      
+              << "."
+              << ql.get_action_count()
+              << "."
+              << ql.get_action_relevance()
+              << "%"
+#endif	      
+	      <<"> "
+              << response << std::endl;
 
 #else
 

@@ -2,7 +2,7 @@
 #define QL_HPP
 
 /**
- * @brief SAMU - the potential ancestor of developmental robotics chatter bots
+ * @brief ISAAC - deep Q learning with neural networks for predicting the next sentence of a conversation
  *
  * @file ql.hpp
  * @author  Norbert Bátfai <nbatfai@gmail.com>
@@ -27,11 +27,11 @@
  *
  * @section DESCRIPTION
  * SAMU
- * 
- * The main purpose of this project is to allow the evaluation and 
- * verification of the results of the paper entitled "A disembodied 
- * developmental robotic agent called Samu Bátfai". It is our hope 
- * that Samu will be the ancestor of developmental robotics chatter 
+ *
+ * The main purpose of this project is to allow the evaluation and
+ * verification of the results of the paper entitled "A disembodied
+ * developmental robotic agent called Samu Bátfai". It is our hope
+ * that Samu will be the ancestor of developmental robotics chatter
  * bots that will be able to chat in natural language like humans do.
  *
  */
@@ -253,6 +253,18 @@ public:
       return u;
   }
 
+#ifdef QNN_DEBUG	        
+  int get_action_count() const
+  {
+    return frqs.size();
+  }
+
+  int get_action_relevance() const
+  {
+    return relevance*100.0;
+  }
+#endif
+
 #ifndef Q_LOOKUP_TABLE
 
   double max_ap_Q_sp_ap ( double image[] )
@@ -276,18 +288,39 @@ public:
     double min_f = -std::numeric_limits<double>::max();
     SPOTriplet ap;
 
+#ifdef QNN_DEBUG
+    double sum {0.0}, rel;
+    double a = std::numeric_limits<double>::max(), b = -std::numeric_limits<double>::max();
+#endif
+
     for ( std::map<SPOTriplet, Perceptron*>::iterator it=prcps.begin(); it!=prcps.end(); ++it )
       {
 
         double  q_spap = ( * ( it->second ) ) ( image );
         double explor = f ( q_spap, frqs[it->first][prg] );
 
+#ifdef QNN_DEBUG
+        sum += q_spap;
+
+        if ( q_spap > b )
+          b = q_spap;
+
+        if ( q_spap < a )
+          a = q_spap;
+#endif
+
         if ( explor >= min_f )
           {
             min_f = explor;
             ap = it->first;
+#ifdef QNN_DEBUG
+            rel = q_spap;
+#endif
           }
       }
+#ifdef QNN_DEBUG
+    relevance = ( rel - sum/ ( ( double ) prcps.size() ) ) / ( b-a );
+#endif
 
     return ap;
   }
@@ -333,7 +366,7 @@ public:
                       << nn_q_s_a
                       << std::endl;
           }
-          
+
         action = argmax_ap_f ( prg, image );
       }
 
@@ -449,6 +482,9 @@ private:
   std::map<SPOTriplet, std::map<std::string, double>> table_;
 #else
   std::map<SPOTriplet, Perceptron*> prcps;
+#ifdef QNN_DEBUG
+  double relevance {0.0};
+#endif
 #endif
 
   std::map<SPOTriplet, std::map<std::string, int>> frqs;

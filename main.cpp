@@ -1,5 +1,5 @@
 /**
- * @brief SAMU - the potential ancestor of developmental robotics chatter bots
+ * @brief ISAAC - deep Q learning with neural networks for predicting the next sentence of a conversation
  *
  * @file main.hpp
  * @author  Norbert Bátfai <nbatfai@gmail.com>
@@ -42,7 +42,7 @@ int main ( int argc, char **argv )
 {
 
   // Do not remove this copyright notice!
-  std::cout << "This program will try to provide a disembodied DevRob agent called Samu Bátfai."
+  std::cout << "This program is Isaac, the son of Samu Bátfai."
             << std::endl
             << "Copyright (C) 2015 Norbert Bátfai"
             << std::endl
