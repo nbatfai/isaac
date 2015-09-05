@@ -36,10 +36,29 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <signal.h>
 #include "samu.hpp"
+
+Samu samu;
+
+void save_samu(int sig)
+{
+  std::cout << "Save samu" << std::endl;
+  //samu.save();
+  exit(0);
+}
 
 int main ( int argc, char **argv )
 {
+  struct sigaction sa;
+  sa.sa_handler = save_samu;
+  sigemptyset ( &sa.sa_mask );
+  sa.sa_flags = SA_RESTART;
+
+  sigaction ( SIGINT, &sa, NULL );
+  sigaction ( SIGTERM, &sa, NULL );
+  sigaction ( SIGKILL, &sa, NULL );
+  sigaction ( SIGHUP, &sa, NULL );
 
   // Do not remove this copyright notice!
   std::cout << "This program is Isaac, the son of Samu Bátfai."
@@ -75,7 +94,7 @@ int main ( int argc, char **argv )
 
   int j {0};
 
-  for ( Samu samu; samu.run(); )
+  for ( ; samu.run(); )
     {
       double sum {0.0};
       if ( samu.sleep() )
