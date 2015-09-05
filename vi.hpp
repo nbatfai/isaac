@@ -173,6 +173,11 @@ public:
     return ql.reward();
   }
 
+  void save(std::string &fname)
+  {
+    ql.save(fname);
+  }  
+  
 private:
 
   QL ql;

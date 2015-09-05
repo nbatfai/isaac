@@ -43,8 +43,13 @@ Samu samu;
 
 void save_samu(int sig)
 {
-  std::cout << "Save samu" << std::endl;
-  //samu.save();
+  
+#ifndef Q_LOOKUP_TABLE  
+  std::string samuImage{"samu.image.txt"};
+  samu.save(samuImage);
+#endif
+  
+  samu.halt();
   exit(0);
 }
 

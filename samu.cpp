@@ -54,7 +54,11 @@ void Samu::FamilyCaregiverShell ( void )
   std::cout << Caregiver() << "@Caregiver> " << std::flush;
 
   int sleep {0};
-  for ( ;; )
+  
+  if(sleep_)
+    sleep = sleep_after_ + 1;
+  
+  for ( ; run_ ; )
     {
 
       FD_SET ( 0, &rfds );
@@ -97,6 +101,10 @@ void Samu::FamilyCaregiverShell ( void )
 	    if(!sleep_)
 	      std::cout << "Isaac went to sleep." << std::endl;
             sleep_ = true;
+	  }
+	  else
+	  {
+	      std::cout << sleep << " " << std::endl;	    
 	  }
 	    
         }

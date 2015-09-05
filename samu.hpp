@@ -67,6 +67,12 @@ public:
     return run_;
   }
 
+  bool halt ( void ) 
+  {
+    run_ = false;
+  }
+  
+  
   bool sleep ( void ) const
   {
     return sleep_;
@@ -110,11 +116,19 @@ public:
     return vi.reward();
   }
 
+  void save(std::string & fname)
+  {
+      std::cout << "SAVE"
+            << std::endl;
+    
+    vi.save(fname);
+  }
+  
 private:
 
   bool run_ {true};
   bool sleep_{true};
-  int sleep_after_{30};
+  const int sleep_after_{30};
   std::mutex mutex_;
   std::condition_variable cv_;
   std::thread terminal_thread_ {&Samu::terminal, this};

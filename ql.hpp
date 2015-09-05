@@ -43,6 +43,7 @@
 #include <cmath>
 #include <random>
 #include <limits>
+#include <fstream>
 
 #include "nlp.hpp"
 
@@ -210,6 +211,29 @@ public:
 
   }
 
+  void save ( std::fstream & out )
+  {
+    out << n_layers << " " << std::endl;
+
+    for ( int i {1}; i < n_layers; ++i )
+      {
+        out << n_units[i] << " " << std::endl;
+
+        for ( int j {0}; j < n_units[i]; ++j )
+          {
+            out << n_units[i-1] << " " << std::endl;
+
+            for ( int k {0}; k < n_units[i-1]; ++k )
+              {
+                out << " "
+                    << weights[i-1][j][k];
+
+              }
+          }
+      }
+
+  }
+
 private:
   Perceptron ( const Perceptron & );
   Perceptron & operator= ( const Perceptron & );
@@ -253,7 +277,7 @@ public:
       return u;
   }
 
-#ifdef QNN_DEBUG	        
+#ifdef QNN_DEBUG
   int get_action_count() const
   {
     return frqs.size();
@@ -465,6 +489,26 @@ public:
   double alpha ( int n )
   {
     return 1.0/ ( ( ( double ) n ) + 1.0 );
+  }
+
+  void save ( std::string & fname )
+  {
+    std::fstream samuFile ( fname,  std::ios_base::out );
+
+    samuFile << prcps.size();
+
+    for ( std::map<SPOTriplet, Perceptron*>::iterator it=prcps.begin(); it!=prcps.end(); ++it )
+      {
+        std::cout << "Saving Samu: "
+                  << ( std::distance ( prcps.begin(), it ) * 100 ) / prcps.size()
+                  << "% "
+                  << std::endl;
+
+        samuFile << it->first;
+        it->second->save ( samuFile );
+      }
+
+    samuFile.close();
   }
 
 private:

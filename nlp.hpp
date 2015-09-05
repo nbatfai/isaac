@@ -60,7 +60,7 @@ public:
 
   friend std::ostream & operator<< ( std::ostream & os, const SPOTriplet & t )
   {
-    std::cout << t.s << " " << t.p << " "<< t.o;
+    os << t.s << " " << t.p << " "<< t.o;
 
     return os;
   }
