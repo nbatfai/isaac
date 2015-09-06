@@ -94,6 +94,40 @@ public:
       }
   }
 
+  Perceptron ( std::fstream & file )
+  {
+    file >> n_layers;
+
+    units = new double*[n_layers];
+    n_units = new int[n_layers];
+
+    for ( int i {0}; i < n_layers; ++i )
+      {
+        file >> n_units[i];
+
+        if ( i )
+          units[i] = new double [n_units[i]];
+      }
+
+    weights = new double**[n_layers-1];
+
+    for ( int i {1}; i < n_layers; ++i )
+      {
+        weights[i-1] = new double *[n_units[i]];
+
+        for ( int j {0}; j < n_units[i]; ++j )
+          {
+            weights[i-1][j] = new double [n_units[i-1]];
+
+            for ( int k {0}; k < n_units[i-1]; ++k )
+              {
+                file >> weights[i-1][j][k];
+              }
+          }
+      }
+  }
+
+
   double sigmoid ( double x )
   {
     return 1.0/ ( 1.0 + exp ( -x ) );
@@ -213,16 +247,16 @@ public:
 
   void save ( std::fstream & out )
   {
-    out << n_layers << " " << std::endl;
+    out << " "
+        << n_layers;
+
+    for ( int i {0}; i < n_layers; ++i )
+      out << " " << n_units[i];
 
     for ( int i {1}; i < n_layers; ++i )
       {
-        out << n_units[i] << " " << std::endl;
-
         for ( int j {0}; j < n_units[i]; ++j )
           {
-            out << n_units[i-1] << " " << std::endl;
-
             for ( int k {0}; k < n_units[i-1]; ++k )
               {
                 out << " "
@@ -495,7 +529,15 @@ public:
   {
     std::fstream samuFile ( fname,  std::ios_base::out );
 
-    samuFile << prcps.size();
+    samuFile /*<< 3
+             << " "
+             << 256*256
+             << " "
+             << 80
+             << " "
+             << 1
+             << " "*/
+        << prcps.size();
 
     for ( std::map<SPOTriplet, Perceptron*>::iterator it=prcps.begin(); it!=prcps.end(); ++it )
       {
@@ -504,11 +546,27 @@ public:
                   << "% "
                   << std::endl;
 
-        samuFile << it->first;
+        samuFile << " "
+                 << it->first;
         it->second->save ( samuFile );
       }
 
     samuFile.close();
+  }
+
+  void load ( std::fstream & file )
+  {
+    int prcpsSize {0};
+    file >> prcpsSize;
+
+    SPOTriplet t;
+    for ( int s {0}; s< prcpsSize; ++s )
+      {
+        file >> t;
+        prcps[t] = new Perceptron ( file );
+      }
+
+
   }
 
 private:

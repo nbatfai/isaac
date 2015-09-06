@@ -178,6 +178,11 @@ public:
     ql.save(fname);
   }  
   
+  void load(std::fstream & file)
+  {    
+    ql.load(file);
+  }    
+  
 private:
 
   QL ql;

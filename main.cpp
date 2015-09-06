@@ -41,20 +41,30 @@
 
 Samu samu;
 
-void save_samu(int sig)
+void save_samu ( int sig )
 {
-  
-#ifndef Q_LOOKUP_TABLE  
-  std::string samuImage{"samu.image.txt"};
-  samu.save(samuImage);
+
+#ifndef Q_LOOKUP_TABLE
+  std::string samuImage {"samu.image.txt"};
+  samu.save ( samuImage );
 #endif
-  
+
   samu.halt();
-  exit(0);
+  exit ( 0 );
 }
 
 int main ( int argc, char **argv )
 {
+
+#ifndef Q_LOOKUP_TABLE
+  std::string samuImage {"samu.image.txt"};
+
+  std::fstream samuFile ( samuImage,  std::ios_base::in );
+  if ( samuFile )
+    samu.load ( samuFile );
+#endif
+
+
   struct sigaction sa;
   sa.sa_handler = save_samu;
   sigemptyset ( &sa.sa_mask );

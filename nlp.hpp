@@ -27,11 +27,11 @@
  *
  * @section DESCRIPTION
  * SAMU
- * 
- * The main purpose of this project is to allow the evaluation and 
- * verification of the results of the paper entitled "A disembodied 
- * developmental robotic agent called Samu Bátfai". It is our hope 
- * that Samu will be the ancestor of developmental robotics chatter 
+ *
+ * The main purpose of this project is to allow the evaluation and
+ * verification of the results of the paper entitled "A disembodied
+ * developmental robotic agent called Samu Bátfai". It is our hope
+ * that Samu will be the ancestor of developmental robotics chatter
  * bots that will be able to chat in natural language like humans do.
  *
  */
@@ -64,6 +64,15 @@ public:
 
     return os;
   }
+
+  friend std::istream & operator>> ( std::istream & os, SPOTriplet & t )
+  {
+
+    os >> t.s >> t.p >> t.o;
+
+    return os;
+  }
+
 
   const bool operator== ( const SPOTriplet &other ) const
   {
@@ -116,7 +125,7 @@ public:
     if ( found != std::string::npos )
       s.erase ( found );
   }
-  
+
 };
 
 typedef std::vector<SPOTriplet> SPOTriplets;

@@ -117,12 +117,14 @@ public:
   }
 
   void save(std::string & fname)
-  {
-      std::cout << "SAVE"
-            << std::endl;
-    
+  {    
     vi.save(fname);
   }
+
+  void load(std::fstream & file)
+  {    
+    vi.load(file);
+  }  
   
 private:
 
