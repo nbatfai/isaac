@@ -143,6 +143,8 @@ int main ( int argc, char **argv )
 */
 
         }
+        else
+	  sleep(1);
     }
 
   return 0;

@@ -74,7 +74,7 @@ void Samu::FamilyCaregiverShell ( void )
         }
       else if ( s )
         {
-          std::string line;
+	  std::string line;
           std::getline ( std::cin,  line );
 
 	  if(sleep_)
@@ -104,7 +104,7 @@ void Samu::FamilyCaregiverShell ( void )
 	  }
 	  else
 	  {
-	      std::cout << sleep << " " << std::endl;	    
+	      std::cout << sleep << " " << std::flush;;	    
 	  }
 	    
         }
