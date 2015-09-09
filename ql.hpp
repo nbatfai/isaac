@@ -139,11 +139,12 @@ public:
 
     for ( int i {1}; i < n_layers; ++i )
       {
-        for ( int j {0}; j < n_units[i]; ++j )
+	#pragma omp parallel for
+        for ( int j = 0; j < n_units[i]; ++j )
           {
             units[i][j] = 0.0;
 
-            for ( int k {0}; k < n_units[i-1]; ++k )
+            for ( int k = 0; k < n_units[i-1]; ++k )
               {
                 units[i][j] += weights[i-1][j][k] * units[i-1][k];
               }
@@ -192,19 +193,21 @@ public:
 
     for ( int i {n_layers-2}; i >0 ; --i )
       {
-        for ( int j {0}; j < n_units[i]; ++j )
+	
+	#pragma omp parallel for	
+        for ( int j =0; j < n_units[i]; ++j )
           {
 
             double sum = 0.0;
 
-            for ( int l {0}; l < n_units[i+1]; ++l )
+            for ( int l = 0; l < n_units[i+1]; ++l )
               {
                 sum += 0.19*weights[i][l][j]*backs[i][l];
               }
 
             backs[i-1][j] = sigmoid ( units[i][j] ) * ( 1.0-sigmoid ( units[i][j] ) ) * sum;
 
-            for ( int k {0}; k < n_units[i-1]; ++k )
+            for ( int k = 0; k < n_units[i-1]; ++k )
               {
                 weights[i-1][j][k] += ( 0.19* backs[i-1][j] *units[i-1][k] );
               }
@@ -525,36 +528,62 @@ public:
     return 1.0/ ( ( ( double ) n ) + 1.0 );
   }
 
-  void save ( std::string & fname )
+  void save_prcps ( std::fstream & samuFile )
   {
-    std::fstream samuFile ( fname,  std::ios_base::out );
-
-    samuFile /*<< 3
-             << " "
-             << 256*256
-             << " "
-             << 80
-             << " "
-             << 1
-             << " "*/
-        << prcps.size();
+    samuFile << prcps.size();
 
     for ( std::map<SPOTriplet, Perceptron*>::iterator it=prcps.begin(); it!=prcps.end(); ++it )
       {
         std::cout << "Saving Samu: "
                   << ( std::distance ( prcps.begin(), it ) * 100 ) / prcps.size()
-                  << "% "
+                  << "% (perceptrons)"
                   << std::endl;
 
         samuFile << " "
                  << it->first;
         it->second->save ( samuFile );
       }
+  }
+
+  void save_frqs ( std::fstream & samuFile )
+  {
+    samuFile << std::endl
+             << frqs.size();
+
+    for ( std::map<SPOTriplet, std::map<std::string, int>>::iterator it=frqs.begin(); it!=frqs.end(); ++it )
+      {
+
+        std::cout << "Saving Samu: "
+                  << ( std::distance ( frqs.begin(), it ) * 100 ) / frqs.size()
+                  << "% (frequency table)"
+                  << std::endl;
+
+        samuFile << " "
+                 << it->first
+                 << " "
+                 << it->second.size();
+        for ( std::map<std::string, int>::iterator itt=it->second.begin(); itt!=it->second.end(); ++itt )
+          {
+            samuFile << " "
+                     << itt->first
+                     << " "
+                     << itt->second;
+          }
+      }
+
+  }
+
+  void save ( std::string & fname )
+  {
+    std::fstream samuFile ( fname,  std::ios_base::out );
+
+    save_prcps ( samuFile );
+    save_frqs ( samuFile );
 
     samuFile.close();
   }
 
-  void load ( std::fstream & file )
+  void load_prcps ( std::fstream & file )
   {
     int prcpsSize {0};
     file >> prcpsSize;
@@ -562,11 +591,49 @@ public:
     SPOTriplet t;
     for ( int s {0}; s< prcpsSize; ++s )
       {
+        std::cout << "Loading Samu: "
+                  << ( s * 100 ) / prcpsSize
+                  << "% (perceptrons)"
+                  << std::endl;
+
         file >> t;
         prcps[t] = new Perceptron ( file );
       }
+  }
+
+  void load_frqs ( std::fstream & file )
+  {
+    int frqsSize {0};
+    file >> frqsSize;
+
+    int mapSize {0};
+    SPOTriplet t;
+    std::string p;
+    int n;
+    for ( int s {0}; s< frqsSize; ++s )
+      {
+        std::cout << "Loading Samu: "
+                  << ( s * 100 ) / frqsSize
+                  << "% (frequency table)"
+                  << std::endl;
+
+        file >> t;
+        file >> mapSize;
+        for ( int ss {0}; ss< mapSize; ++ss )
+          {
+            file >> p;
+            file >> n;
+
+            frqs[t][p] = n;
+          }
+      }
+  }
 
 
+  void load ( std::fstream & file )
+  {
+    load_prcps ( file );
+    load_frqs ( file );
   }
 
 private:

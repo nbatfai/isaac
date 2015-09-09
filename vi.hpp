@@ -182,6 +182,14 @@ public:
   {    
     ql.load(file);
   }    
+
+  void t(void)
+  {
+    while ( !program.empty() )
+      {
+        program.pop();
+      }
+  }
   
 private:
 

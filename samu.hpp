@@ -83,7 +83,8 @@ public:
     return sleep_after_;
   }
   
-  
+  void t(void) {vi.t();}
+    
   void FamilyCaregiverShell ( void );
   void terminal ( void )
   {

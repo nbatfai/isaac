@@ -40,9 +40,14 @@
 #include "samu.hpp"
 
 Samu samu;
+bool halted {false};
 
 void save_samu ( int sig )
 {
+
+  if ( halted )
+    return;
+  halted = true;
 
 #ifndef Q_LOOKUP_TABLE
   std::string samuImage {"samu.image.txt"};
@@ -121,6 +126,22 @@ int main ( int argc, char **argv )
 
             }
           std::cerr << "###### " << ++j << "-th iter " << sum << std::endl;
+
+/*
+          if ( j == 5 )
+            {
+              // samu.t();
+
+              std::string samuImage {"samu.image.txt"};
+
+              std::fstream samuFile ( samuImage,  std::ios_base::in );
+              if ( samuFile )
+                samu.load ( samuFile );
+
+
+            }
+*/
+
         }
     }
 

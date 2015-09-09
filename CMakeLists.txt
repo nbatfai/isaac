@@ -45,7 +45,12 @@ project(SAMU)
 #add_definitions(-DQ_LOOKUP_TABLE)
 add_definitions(-DQNN_DEBUG)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -O3")
+
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 find_package( Boost COMPONENTS date_time REQUIRED )  
 
