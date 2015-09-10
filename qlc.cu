@@ -54,7 +54,8 @@ prcp ( int j, int nu, double *newu, double *u, double *w )
 __global__ void
 layer_kernel ( int nu, double *newu, double *u, double *w )
 {
-    int j = blockIdx.x;
+    //int j = blockIdx.x;
+    int j = threadIdx.x;
     newu[j] = prcp ( j, nu, newu, u, w );
 }
 
@@ -75,10 +76,15 @@ void cuda_layer ( int i, int* n_units,   double **units,   double ***weights )
         cudaMemcpy ( device_w+wi*n_units[i-1], weights[i-1][wi],
                      n_units[i-1]*sizeof ( double ), cudaMemcpyHostToDevice );
     }
-
+    ///*
+    dim3 grid ( 1, 1 );
+    dim3 tgrid ( n_units[i] , 1 );
+    layer_kernel <<< grid, tgrid >>> ( n_units[i-1], device_newu, device_u, device_w );
+    //*/
+    /*
     dim3 grid ( n_units[i] , 1 );
     layer_kernel <<< grid, 1 >>> ( n_units[i-1], device_newu, device_u, device_w );
-
+    */
     cudaMemcpy ( units[i], device_newu,
                  n_units[i]*sizeof ( double ), cudaMemcpyDeviceToHost );
 

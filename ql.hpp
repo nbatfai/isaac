@@ -78,8 +78,8 @@ public:
 
     weights = new double**[n_layers-1];
 
-/*    std::random_device init;
-    std::default_random_engine gen {init() };*/
+    std::random_device init;
+    std::default_random_engine gen {init() };
     std::default_random_engine gen ;
     std::uniform_real_distribution<double> dist ( -1.0, 1.0 );
 
@@ -416,6 +416,7 @@ public:
     if ( prcps.find ( triplet ) == prcps.end() )
       {
         prcps[triplet] = new Perceptron ( 3, 256*256, 80, 1 );
+        //prcps[triplet] = new Perceptron ( 3, 256*256, 400, 1 );
       }
 
     SPOTriplet action = triplet;

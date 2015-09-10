@@ -56,7 +56,8 @@ if(${CUDA_LAYERS})
 
   add_definitions(-DCUDA_PRCPS)
   find_package(CUDA REQUIRED)
-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3 -std=c++11 -gencode arch=compute_30,code=sm_30)
+  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3 -std=c++11 
+  -gencode arch=compute_30,code=sm_30)
 
 endif()
   
