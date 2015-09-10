@@ -46,6 +46,10 @@
 #include <fstream>
 
 #include "nlp.hpp"
+#include "qlc.h"
+
+#define MERET 600
+#define ITER_HAT 32000
 
 #ifndef Q_LOOKUP_TABLE
 class Perceptron
@@ -74,8 +78,9 @@ public:
 
     weights = new double**[n_layers-1];
 
-    std::random_device init;
-    std::default_random_engine gen {init() };
+/*    std::random_device init;
+    std::default_random_engine gen {init() };*/
+    std::default_random_engine gen ;
     std::uniform_real_distribution<double> dist ( -1.0, 1.0 );
 
     for ( int i {1}; i < n_layers; ++i )
@@ -133,12 +138,21 @@ public:
     return 1.0/ ( 1.0 + exp ( -x ) );
   }
 
+  
   double operator() ( double image [] )
   {
+        
     units[0] = image;
 
     for ( int i {1}; i < n_layers; ++i )
       {
+	
+#ifdef CUDA_PRCPS
+
+	cuda_layer(i, n_units, units, weights);
+	
+#else
+	
 	#pragma omp parallel for
         for ( int j = 0; j < n_units[i]; ++j )
           {
@@ -152,6 +166,9 @@ public:
             units[i][j] = sigmoid ( units[i][j] );
 
           }
+         
+#endif          
+          
       }
 
     return sigmoid ( units[n_layers - 1][0] );

@@ -42,11 +42,24 @@
 cmake_minimum_required(VERSION 2.8.5)
 project(SAMU)
 
+#set(CUDA_LAYERS ON)
+set(CUDA_LAYERS OFF)
+
+# uncomment to use Q lookup table
 #add_definitions(-DQ_LOOKUP_TABLE)
+
 add_definitions(-DQNN_DEBUG)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -O3")
 
+if(${CUDA_LAYERS})
+
+  add_definitions(-DCUDA_PRCPS)
+  find_package(CUDA REQUIRED)
+  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3 -std=c++11 -gencode arch=compute_30,code=sm_30)
+
+endif()
+  
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -69,7 +82,16 @@ include(FindLinkGrammar.cmake)
 
 INCLUDE_DIRECTORIES(${LINK_GRAMMAR_INCLUDE_DIRS})
 
-add_executable(samu nlp.hpp nlp.cpp vi.hpp ql.hpp samu.hpp samu.cpp main.cpp)
+if (CUDA_FOUND)
+
+  cuda_compile(CUDASRCS qlc.cu)
+  cuda_add_executable(samu ${CUDASRCS} nlp.hpp nlp.cpp vi.hpp qlc.h ql.hpp samu.hpp samu.cpp main.cpp  )
+
+else()
+
+  add_executable(samu nlp.hpp nlp.cpp vi.hpp ql.hpp samu.hpp samu.cpp main.cpp  )
+
+endif()
 
 target_link_libraries(samu ${LINK_GRAMMAR_LIBRARIES} ${PNGwriter_LIBRARIES} ${Boost_LIBRARIES})
 
