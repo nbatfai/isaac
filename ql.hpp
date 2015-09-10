@@ -80,7 +80,6 @@ public:
 
     std::random_device init;
     std::default_random_engine gen {init() };
-    std::default_random_engine gen ;
     std::uniform_real_distribution<double> dist ( -1.0, 1.0 );
 
     for ( int i {1}; i < n_layers; ++i )
