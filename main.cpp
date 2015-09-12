@@ -123,7 +123,7 @@ int main ( int argc, char **argv )
             {
               samu << test[i];
               sum += samu.reward();
-
+              //sleep(1);
             }
           std::cerr << "###### " << ++j << "-th iter " << sum << std::endl;
 

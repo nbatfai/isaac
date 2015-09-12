@@ -48,9 +48,6 @@
 #include "nlp.hpp"
 #include "qlc.h"
 
-#define MERET 600
-#define ITER_HAT 32000
-
 #ifndef Q_LOOKUP_TABLE
 class Perceptron
 {

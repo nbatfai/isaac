@@ -94,7 +94,7 @@ public:
         prg += triplet.s.c_str();
         prg += triplet.p.c_str();
         prg += triplet.o.c_str();
-
+	
         std::snprintf ( stmt_buffer, 1024, "%s.%s(%s);", triplet.s.c_str(), triplet.p.c_str(), triplet.o.c_str() );
 
         char font[] = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf";
