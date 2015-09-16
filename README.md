@@ -9,6 +9,8 @@ The main purpose of this project is to allow the evaluation and verification of 
 *"The son of Samu is Isaac."* The project called Isaac is a case study of using deep Q learning with neural networks for predicting the next sentence of a conversation.
 3. [Jacob](https://github.com/nbatfai/jacob)
 *"The son of Isaac is Jacob."* The project called Jacob is an experiment to replace Isaac's (GUI based) visual imagination with a character console. 
+4. [Judah](https://github.com/nbatfai/judah)
+*"The son of Jacob is Judah."* In the project called Judah we equip Jacob with a text-based user interface.
 
 ## Use cases
 
