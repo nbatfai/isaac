@@ -1,5 +1,6 @@
 # Isaac
 "The son of Samu is Isaac." It is our hope that Samu (and Isaac) will be the ancestor of developmental robotics chatter bots that will be able to chat in natural language like humans do.
+See also the page [Family Robotics - Deep Q-learning with Samu](http://shrek.unideb.hu/~nbatfai/)
 
 ## Genealogy of Isaac
 
