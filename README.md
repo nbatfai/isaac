@@ -19,6 +19,8 @@ The main purpose of this project is to allow the evaluation and verification of 
 *"The son of Perez is Hezron."* The project called Hezron gives the opportunity to experiment with different arrangements of SPO triplets in the visual imagery.
 8. [Ram](https://github.com/nbatfai/ram)
 *"The son of Hezron is Ram."* The project called Ram allows to experiment with different deep Q learning algorithms to express feelings when he is talking.
+9. [Amminadab](https://github.com/nbatfai/amminadab)
+*"The son of Ram is Amminadab."* In project called Amminadab we can significantly improve Samu's learning by using the Liv-Zempel-Welch dictionary tree to narrow the scope of selecting Q-actions.
 
 ## Use cases
 
